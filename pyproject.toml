@@ -1,0 +1,184 @@
+[project]
+name = "maxapi"
+version = "1.0.0"
+description = "Библиотека для разработки чат-ботов с помощью API мессенджера MAX"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Denis", email = "bestloveapples@gmail.com" }]
+keywords = ["max", "api", "bot"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "aiohttp>=3.13,<4",
+    "backoff>=2.0,<3",
+    "magic_filter>=1.0.0,<2",
+    "pydantic>=2,<3",
+    "aiofiles>=24.1,<26",
+    "puremagic>=1.30,<2",
+]
+
+[project.urls]
+Homepage = "https://github.com/love-apples/maxapi"
+
+[tool.setuptools]
+license-files = []
+
+[build-system]
+requires = [
+    "setuptools>=82.0.0",
+    "wheel>=0.46.3",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["maxapi*", "wiki*", "examples*"]
+
+[project.optional-dependencies]
+webhook = [
+    "fastapi>=0.103.0,<1",
+    "uvicorn>=0.15.0,<1",
+]
+fastapi = [
+    "fastapi>=0.103.0,<1",
+    "uvicorn>=0.15.0,<1",
+]
+litestar = [
+    "litestar>=2.0.0,<3",
+    "uvicorn>=0.15.0,<1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15",
+    "mypy>=1.19.1",
+    "types-aiofiles>=25.1.0",
+    "pre-commit>=4.0",
+    "coverage>=7.13",
+    "mkdocs>=1.6.1,<2.0.0",
+    "mkdocs-material>=9.7.1",
+    "mkdocstrings[python]>=1.0.3",
+    "pymdown-extensions>=10.21",
+    "python-dotenv>=1.2.1",
+    "Faker>=40.4.0",
+    "httpx>=0.28.1,<1",
+    "fastapi>=0.103.0,<1",
+    "uvicorn>=0.15.0,<1",
+    "litestar>=2.0.0,<3",
+    "aresponses>=3.0.0,<4",
+]
+
+[tool.uv]
+# Enable uv project management and include `dev` group by default when running/syncing
+default-groups = ["dev"]
+managed = true
+
+[tool.mypy]
+python_version = "3.10"
+namespace_packages = true
+ignore_missing_imports = true
+exclude = ["core/yandex/cloud", "core/google"]
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+# Путь к тестам
+testpaths = ["tests"]
+
+# Автоматический режим для asyncio
+asyncio_mode = "auto"
+
+# Параметры запуска
+addopts = "-ra --strict-markers -v -W ignore::pytest.PytestUnraisableExceptionWarning"
+
+# Маркеры
+markers = [
+    "integration: интеграционные тесты, требующие реальный токен бота",
+    "slow: медленные тесты",
+]
+
+# Фильтры предупреждений
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+]
+
+
+[tool.ruff]
+src = ["maxapi", "tests"]
+exclude = ["core/yandex/cloud", "core/google"]
+line-length = 79
+indent-width = 4
+target-version = "py310"
+
+
+[tool.ruff.lint]
+# TODO: добавить BLE N PGH PLR TRY
+select = ["ALL"]
+ignore = [
+    "BLE", # TODO: требует рефакторинга
+    "ERA", # TODO: требует рефакторинга
+    "N", # TODO: требует рефакторинга
+    "PGH", # TODO: требует рефакторинга
+    "PLR", # TODO: требует рефакторинга
+    "TRY", # TODO: требует рефакторинга
+    "RUF006", # TODO: требует рефакторинга
+    "A",
+    "ARG",
+    "ANN",
+    "COM812",
+    "D",
+    "DTZ",
+    "EXE",
+    "EM",
+    "FIX",
+    "PLW1641",
+    "TC006",
+    "RET",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "SIM108",
+    "SIM118",
+    "TD",
+    "TID",
+]
+
+flake8-type-checking.runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**.py" = [
+    "ARG",
+    "E402",
+    "PL",
+    "S",
+    "SLF",
+]
+"maxapi/methods/send_message.py" = [
+    "C90", # TODO: требует рефакторинга
+]
+"maxapi/methods/edit_message.py" = [
+    "C90", # TODO: требует рефакторинга
+]
+"maxapi/connection/base.py" = [
+    "C90", # TODO: требует рефакторинга
+]
+"maxapi/utils/updates.py" = [
+    "C90", # TODO: требует рефакторинга
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+skip-magic-trailing-comma = false
+docstring-code-format = true
